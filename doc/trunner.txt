@@ -1,0 +1,97 @@
+*trunner.txt*  A plugin for running source code in Neovim
+
+================================================================================
+CONTENTS                                                        *trunner-contents*
+
+1. Introduction ................................... |trunner-introduction|
+2. Requirements ................................... |trunner-requirements|
+3. Installation ................................... |trunner-installation|
+4. Usage .......................................... |trunner-usage|
+5. Configuration .................................. |trunner-configuration|
+6. Commands ....................................... |trunner-commands|
+7. Variables ...................................... |trunner-variables|
+8. About .......................................... |trunner-about|
+
+================================================================================
+1. INTRODUCTION                                              *trunner-introduction*
+
+Trunner is a simple Neovim plugin that simplifies running source code directly 
+from the editor. It integrates with NvChad to display results in the terminal.
+
+================================================================================
+2. REQUIREMENTS                                            *trunner-requirements*
+
+* Neovim >= 0.7.0
+* NvChad/nvterm
+
+================================================================================
+3. INSTALLATION                                             *trunner-installation*
+
+Using lazy.nvim: >
+    {
+      'sinedka/trunner.nvim',
+      dependencies = 'NvChad/NvChad'
+    }
+<
+
+================================================================================
+4. USAGE                                                       *trunner-usage*
+
+After installing the plugin, you can run the current file with the command: >
+    :RunProgram
+<
+
+The plugin will automatically select the appropriate command to run based on the 
+file type (determined by filetype) and display the result in the terminal.
+
+================================================================================
+5. CONFIGURATION                                           *trunner-configuration*
+
+To configure the plugin, use the setup function: >
+    require('trunner').setup({
+      commands = {
+        -- Configure commands for different file types
+        cpp = "cd $dir && g++ $fileName -o $fileNameWithoutExt && ./$fileNameWithoutExt",
+        c = "cd $dir && g++ $fileName -o $fileNameWithoutExt && ./$fileNameWithoutExt",
+        python = "python3 $file",
+        -- Add your settings for other languages
+      },
+      term = {
+        pos = "sp",   -- Terminal position: sp(split), vs(vsplit), float
+        id = "htoggleTerm", -- Terminal ID for NvChad
+      },
+    })
+<
+
+By default, the plugin supports C and C++. You can add support for any language 
+by specifying a command for it to run.
+
+================================================================================
+6. COMMANDS                                                  *trunner-commands*
+
+*:RunProgram*     Runs the current file using the appropriate command for its type.
+
+*:TrunnerHelp*    Opens the plugin documentation.
+
+================================================================================
+7. VARIABLES                                              *trunner-variables*
+
+When configuring run commands, you can use the following variables:
+
+$fileNameWithoutExt  Filename without extension
+$fileName            Full filename with extension
+$file                Full path to the file
+$dir                 Directory containing the file
+
+Example: >
+    python = "cd $dir && python3 $fileName"
+<
+
+================================================================================
+8. ABOUT                                                  *trunner-about*
+
+Repository: https://github.com/sinedka/trunner.nvim
+Author: sinedka
+License: MIT
+
+ vim:tw=78:et:ft=help:norl: 
