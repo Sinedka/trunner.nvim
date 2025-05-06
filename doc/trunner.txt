@@ -30,7 +30,7 @@ from the editor. It integrates with NvChad to display results in the terminal.
 Using lazy.nvim: >
     {
       'sinedka/trunner.nvim',
-      dependencies = 'NvChad/NvChad'
+      cmd = { "RunProgram" }
     }
 <
 

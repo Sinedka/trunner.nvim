@@ -15,8 +15,8 @@ Using [packer.nvim](https://github.com/wbthomason/packer.nvim):
 
 ```lua
 use {
-  'sinedka/trunner.nvim',
-  requires = 'NvChad/NvChad'
+  'Sinedka/trunner.nvim',
+  cmd = { "RunProgram" }
 }
 ```
 
