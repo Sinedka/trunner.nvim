@@ -15,6 +15,16 @@ Using [packer.nvim](https://github.com/wbthomason/packer.nvim):
 
 ```lua
 use {
+  'sinedka/trunner.nvim',
+  cmd = { "RunProgram" }
+}
+```
+
+
+Using [lazy.nvim](https://github.com/folke/lazy.nvim):
+
+```lua
+{
   'Sinedka/trunner.nvim',
   cmd = { "RunProgram" }
 }

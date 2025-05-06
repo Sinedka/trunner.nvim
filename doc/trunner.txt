@@ -27,6 +27,13 @@ from the editor. It integrates with NvChad to display results in the terminal.
 ================================================================================
 3. INSTALLATION                                             *trunner-installation*
 
+Using packer.nvim: >
+    use {
+      'sinedka/trunner.nvim',
+      cmd = { "RunProgram" }
+    }
+<
+
 Using lazy.nvim: >
     {
       'sinedka/trunner.nvim',
