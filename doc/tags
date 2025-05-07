@@ -1,5 +1,4 @@
 :RunProgram	trunner.txt	/*:RunProgram*
-:TrunnerHelp	trunner.txt	/*:TrunnerHelp*
 trunner-about	trunner.txt	/*trunner-about*
 trunner-commands	trunner.txt	/*trunner-commands*
 trunner-configuration	trunner.txt	/*trunner-configuration*
