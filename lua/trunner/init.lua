@@ -14,6 +14,15 @@ function M.run_current_file()
   local opts = o.get()
   local path = vim.fn.expand "%:p"
   local ft = vim.bo.filetype
+  if ft == "NvTerm_sp" then
+    local prev_buf = vim.fn.bufnr "#" -- получаем номер предыдущего буфера ('#')
+    print(prev_buf)
+    if prev_buf ~= -1 then -- проверяем, что буфер существует
+      ft = vim.bo[prev_buf].filetype
+      path = vim.fn.fnamemodify(vim.fn.bufname "#", ":p")
+    end
+  end
+
   local cmd = opts.commands[ft]
 
   if not cmd then
