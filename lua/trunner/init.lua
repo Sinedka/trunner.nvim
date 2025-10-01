@@ -30,30 +30,45 @@ local function dap_run(filetype, binary, input_file)
   dap.run(config)
 end
 
-local function run_in_term(cmd)
-  return coroutine.wrap(function()
-    vim.cmd("botright split | resize 15 | terminal " .. cmd)
-    local bufnr = vim.api.nvim_get_current_buf()
-    local co = coroutine.running()
+local function run_commands_sequential_term(commands, func)
+  local i = 1
 
+  local function run_next()
+    if i > #commands then
+      if func then
+        func()
+      end
+      print("Все команды выполнены")
+      return
+    end
+
+    local cmd = commands[i]
+    i = i + 1
+
+    -- Создаём терминальный буфер
+    vim.cmd("botright split | resize 15 | terminal")
+    local bufnr = vim.api.nvim_get_current_buf()
+    local term_job_id = vim.b.terminal_job_id
+
+    -- Отправляем команду в терминал
+    vim.fn.chansend(term_job_id, table.concat(cmd, " ") .. "\n")
+
+    -- Ждём окончания команды
     vim.api.nvim_create_autocmd("TermClose", {
       buffer = bufnr,
       once = true,
       callback = function(ev)
-        local status = (ev.status == 0) and 0 or 1
-        if status == 0 then
+        -- Удаляем буфер, если команда завершилась успешно
+        if ev.status == 0 then
           vim.api.nvim_buf_delete(bufnr, { force = true })
         end
-        coroutine.resume(co, status)
-      end,
+        run_next() -- запускаем следующую команду
+      end
     })
+  end
 
-    -- yield до завершения процесса
-    local result = coroutine.yield()
-    return result
-  end)()
+  run_next()
 end
-
 function M.run_current_Project(isDebug)
   local opts = o.get();
   local function file_in_project_root_exists(filename)
@@ -78,7 +93,7 @@ function M.run_current_Project(isDebug)
   for key, v in pairs(opts.dir_files) do
     local cmd;
     if correct_project_type(v) then
-      if not(key == 'cmake' and opts.options.UseCmakeTools) then
+      if not (key == 'cmake' and opts.options.UseCmakeTools) then
         cmd = opts.commands[key].build;
         if not cmd then goto continue; end
       end
@@ -130,21 +145,12 @@ function M.run_current_file(isDebug, test)
     vim.schedule(function()
       vim.notify("Привет из Neovim!", vim.log.levels.INFO)
       local cmd = utils.replaceVars(cmds.build_debug, path)
-      local code1 = run_in_term(cmd)
-      vim.notify("Привет из Neovim!", vim.log.levels.INFO)
-      vim.notify(code1, vim.log.levels.INFO)
-      if code1 == 0 then
+      run_commands_sequential_term({ cmd }, function()
         dap_run(ft, path, testf)
-      end
+      end)
     end)
   else
-    vim.schedule(function()
-      local cmd = utils.replaceVars(cmds.build, path)
-      local code1 = run_in_term(cmd)
-      if code1 == 0 then
-        utils.replaceVars(cmds.run, path)
-      end
-    end)
+    run_commands_sequential_term({ utils.replaceVars(cmds.build, path), utils.replaceVars(cmds.run, path) })
   end
 end
 
