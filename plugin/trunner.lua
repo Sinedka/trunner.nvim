@@ -11,7 +11,7 @@ vim.api.nvim_create_user_command(
     if opts.args == "no_tests" then
       require("trunner").run_current_file(true, -1)
     else
-      require("trunner").run_current_file(true, opts)
+      require("trunner").run_current_file(true, opts.args)
     end
   end,
   { nargs = "?", complete = function() return { "no_tests"} end }
