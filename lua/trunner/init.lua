@@ -51,7 +51,7 @@ local function run_commands_sequential_term(commands, func)
     local term_job_id = vim.b.terminal_job_id
 
     -- Отправляем команду в терминал
-    vim.fn.chansend(term_job_id, table.concat(cmd, " ") .. "\n")
+    vim.fn.chansend(term_job_id, cmd .. "\n")
 
     -- Ждём окончания команды
     vim.api.nvim_create_autocmd("TermClose", {
