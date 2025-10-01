@@ -128,6 +128,7 @@ function M.run_current_file(isDebug, test)
 
   if isDebug then
     vim.schedule(function()
+      vim.notify("Привет из Neovim!", vim.log.levels.INFO)
       local cmd = utils.replaceVars(cmds.build_debug, path)
       local code1 = run_in_term(cmd)
       vim.notify("Привет из Neovim!", vim.log.levels.INFO)
