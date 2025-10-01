@@ -78,7 +78,7 @@ function M.run_current_Project(isDebug)
   for key, v in pairs(opts.dir_files) do
     local cmd;
     if correct_project_type(v) then
-      if key ~= 'cmake' or ~opts.options.UseCmakeTools then
+      if not(key == 'cmake' and opts.options.UseCmakeTools) then
         cmd = opts.commands[key].build;
         if not cmd then goto continue; end
       end
