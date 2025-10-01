@@ -19,10 +19,10 @@ local options = {
       end,
     },
     cpp = {
-      run = "./$fileNameWithoutExt";
-      build = "g++ $fileName -o $fileNameWithoutExt",
-      build_debug = "g++ $fileName -o $fileNameWithoutExt -g";
-      outfile = "$fileNameWithoutExt";
+      run = "./\"$fileNameWithoutExt\"";
+      build = "g++ \"$fileName\" -o \"$fileNameWithoutExt\"",
+      build_debug = "g++ \"$fileName\" -o \"$fileNameWithoutExt\" -g";
+      outfile = "\"$fileNameWithoutExt\"";
     },
     c = {
       run = "./$fileNameWithoutExt";
