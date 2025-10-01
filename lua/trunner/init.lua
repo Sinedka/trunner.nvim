@@ -130,6 +130,8 @@ function M.run_current_file(isDebug, test)
     vim.schedule(function()
       local cmd = utils.replaceVars(cmds.build_debug, path)
       local code1 = run_in_term(cmd)
+      vim.notify("Привет из Neovim!", vim.log.levels.INFO)
+      vim.notify(code1, vim.log.levels.INFO)
       if code1 == 0 then
         dap_run(ft, path, testf)
       end
